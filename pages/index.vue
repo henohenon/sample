@@ -72,12 +72,23 @@
                 if(atkProps.targetNumb <= targets) {
                   break;
                 }
+              }else{
+                console.log('else');
               }
             }
             index++;
           })
 
-          
+          index = 0;
+
+          // 同時志望パターンがややっこしかったので、for文が採用されました。
+          for(let i = 0; i<self.$store.getters.getActors.length; i++) {
+            console.log(self.$store.getters.getActors[i].hp,self.$store.getters.getActors[i].hp<=0)
+            if(self.$store.getters.getActors[i].hp <= 0){
+              self.$store.commit('destroyActor',i);
+              i--;
+            }
+          };
         }, 1000);
       }, 800);
 

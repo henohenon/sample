@@ -76,16 +76,19 @@ const createStore = () => {
       // actorにダメージ obj:{damagedActorNumb, takeDActorNumb}
       damageToActor(state, obj){
         const damagedActor = state.actors[obj.takeDActorNumb];
-        console.log(damagedActor.attackProps);
         let damage = state.actors[obj.damagedActorNumb].attackProps.attackPoint - damagedActor.deffencePoint;
         // 防御高すぎて回復しちゃった対策
         if(damage<0){
           damage = 0;
         }
 
-        console.log(damage);
 
         damagedActor.hp -= damage;
+      },
+      // 削除関数
+      destroyActor(state,actorNumb){
+        state.map[state.actors[actorNumb].y][state.actors[actorNumb].x] = '';
+        state.actors.splice(actorNumb, 1);
       }
     }
   })
