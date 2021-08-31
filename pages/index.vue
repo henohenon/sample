@@ -1,7 +1,12 @@
 <template>
   <section class="container">
     <div id="box">
-      <Actor v-for="item in actors" :key="item.id" :maxHp="item.maxHp" :hp="item.hp"></Actor>
+      <Actor v-for="item in actors" :key="item.id" 
+        :maxHp="item.maxHp" 
+        :hp="item.hp" 
+        :x ="item.x" 
+        :y ="item.y">
+      </Actor>
     </div>
 
 <!-- 道をmapから生成しようと思ったけど微妙そうだったのでやめた痕跡
@@ -71,18 +76,5 @@
   #box{
     width: 1000px;
     height: 300px;
-  }
-
-  .actor{
-    width: 50px;
-	  height: 50px;
-	  border-radius: 50%;
-    background: skyblue;
-    position: absolute;
-    text-align: center;
-    meter{
-      width: 90%;
-      transform: translate(0%,200%);
-    }
   }
 </style>
