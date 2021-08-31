@@ -45,6 +45,9 @@ const createStore = () => {
     mutations: {
       // actor配置
       spawnActor(state,obj) {
+        if(state.map[obj.y][obj.x] !== ''){
+          return
+        }
         const template = state.actorTemplates[obj.actorName];
         state.actors.unshift({
           id : obj.uuid ,
@@ -58,8 +61,12 @@ const createStore = () => {
       },
       moveActor(state,obj) {
         console.log(obj);
+        state.map[state.actors[obj.actorNumb].y][state.actors[obj.actorNumb].x] = '';
+      
         state.actors[obj.actorNumb].x += obj.addX;
         state.actors[obj.actorNumb].y += obj.addY;
+
+        state.map[state.actors[obj.actorNumb].y][state.actors[obj.actorNumb].x] = state.actors[obj.actorNumb];
       },
     }
   })
