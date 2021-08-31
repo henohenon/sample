@@ -6,14 +6,14 @@ const createStore = () => {
       actorTemplates: 
       {
         henohenomoheji:{defaultHp:10.0, imagePath:'', deffencePoint:0,
+        // attackLocationsは、x,yで作る。実装するときにイメージしやすいように。
           attackProps:{targetNumb:1, attackPoint: 1, attackLocations:[[1,0]]}
         }
       },
       // actorがいれば、そのuuidが入る。getするときに[y][x]になっちゃうのがややっこしいところ。
       map: [['','','','','']],
-      actors:[
-        // {id:'uuid' ,actorName:'henohenomoheji',whichSize:'left',maxHp:10.0,hp:10.0,x:0,y:0}
-      ]
+      // actorの配列〜{id, actorName, whichSide, maxHp, hp, deffencePoint, attackProps, x, y}
+      actors:[]
     }),
     getters: {
       getActors(state) {
@@ -21,7 +21,6 @@ const createStore = () => {
       },
       getActor: (state) => (id) => {
         const tmp = state.actors.filter(e => e.id === id);
-        console.log(id,tmp)
         if(tmp.length > 0){
           return tmp[0];
         }
@@ -29,6 +28,7 @@ const createStore = () => {
       },
       getActorNumb: (state,getters) => (id) => {
         const actor = getters.getActor(id);
+
         if(actor !== null){
           return state.actors.indexOf(actor);
         }
@@ -45,9 +45,9 @@ const createStore = () => {
       }
     },
     mutations: {
-      // actor配置
-      spawnActor(state,obj) {
-        //位置被ってたら召喚中止
+      // actor配置 obj:{uuid, actorName, x, y, whichSide}
+      spawnActor(state, obj) {
+        // 位置被ってたら召喚中止
         if(state.map[obj.y][obj.x] !== ''){
           return
         }
@@ -58,19 +58,35 @@ const createStore = () => {
           whichSide : obj.whichSide ,
           maxHp : template.defaultHp ,
           hp : template.defaultHp ,
+          deffencePoint : template.deffencePoint,
+          attackProps : template.attackProps,
           x  : obj.x , 
           y  : obj.y
         })
       },
-      moveActor(state,obj) {
-        console.log(obj);
+      // actor移動 obj:{actorNumb, addX, addY}
+      moveActor(state, obj) {
         state.map[state.actors[obj.actorNumb].y][state.actors[obj.actorNumb].x] = '';
       
         state.actors[obj.actorNumb].x += obj.addX;
         state.actors[obj.actorNumb].y += obj.addY;
 
-        state.map[state.actors[obj.actorNumb].y][state.actors[obj.actorNumb].x] = state.actors[obj.actorNumb];
+        state.map[state.actors[obj.actorNumb].y][state.actors[obj.actorNumb].x] = state.actors[obj.actorNumb].id;
       },
+      // actorにダメージ obj:{damagedActorNumb, takeDActorNumb}
+      damageToActor(state, obj){
+        const damagedActor = state.actors[obj.takeDActorNumb];
+        console.log(damagedActor.attackProps);
+        let damage = state.actors[obj.damagedActorNumb].attackProps.attackPoint - damagedActor.deffencePoint;
+        // 防御高すぎて回復しちゃった対策
+        if(damage<0){
+          damage = 0;
+        }
+
+        console.log(damage);
+
+        damagedActor.hp -= damage;
+      }
     }
   })
 }

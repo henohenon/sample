@@ -45,16 +45,54 @@
       // thisがsetInterval内だと狂う(詳しくは知らん)ため、無理やり変数に格納する。参考→https://mi2log.hatenablog.jp/entry/20141206/1417856996
       const self=this;
 
+      // 移動用とタイミングをずらす
+      setTimeout(function(){
+        // 攻撃用タイマーループ
+        setInterval(function () {
+          // ...間違ってるのはわかってる(index)。
+          let index = 0;
+          self.$store.getters.getActors.forEach(actor => {
+            // 左右どっち行くか判定。ココ雑なので、向きをもたせるなり何なりさせたい。
+            let addX = 1;
+            if(actor.whichSide === 'right'){
+              addX=-1;
+            }
+
+            const atkProps = self.$store.getters.getTemplate([actor.actorName]).attackProps;
+            let targets = 0;
+            for(let i = 0; i < atkProps.attackLocations.length; i++){
+              const attackPosId = self.$store.getters.getPosId({x:actor.x+atkProps.attackLocations[i][0]*addX, y:actor.y+atkProps.attackLocations[i][1]});
+              if(attackPosId !== ''){
+                self.$store.commit('damageToActor', {
+                  damagedActorNumb: index,
+                  takeDActorNumb : self.$store.getters.getActorNumb(attackPosId),
+                })
+                targets++;
+
+                if(atkProps.targetNumb <= targets) {
+                  break;
+                }
+              }
+            }
+            index++;
+          })
+
+          
+        }, 1000);
+      }, 800);
+
+      // 移動用timerループ
       setInterval(function () {
-        // ...間違ってるのはわかってる(index)。
         let index = 0;
         self.$store.getters.getActors.forEach(actor => {
+          // 左右どっち行くか判定。ココ雑なので、向きをもたせるなり何なりさせたい。
           let addX = 1;
           if(actor.whichSide === 'right'){
             addX=-1;
           }
-          const posId = self.$store.getters.getPosId({x:actor.x+addX, y:actor.y});
-          if(posId === ''){
+          
+          const movePosId = self.$store.getters.getPosId({x:actor.x+addX, y:actor.y});
+          if(movePosId === ''){
             self.$store.commit('moveActor', {
               actorNumb : index,
               addX,
@@ -63,7 +101,7 @@
           }
           index++;
         })
-      }, 1000)
+      }, 1000);
     },
     methods: {
       spawn(whichSide) {
