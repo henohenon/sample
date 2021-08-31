@@ -17,7 +17,8 @@
     </div>
 -->
 
-    <button @click="spawn">spawnActor</button>
+    <button id="leftSpawn"  @click="spawn('left')">spawnActorL</button>
+    <button id="rightSpawn" @click="spawn('right')">spawnActorR</button>
   </section>
 </template>
 
@@ -48,23 +49,29 @@
         // ...間違ってるのはわかってる(index)。
         let index = 0;
         self.$store.getters.getActors.forEach(actor => {
-          if(actor.whichSide === 'left'){
-            const posId = self.$store.getters.getPosId({x:actor.x+1, y:actor.y});
-            if(posId === ''){
-              self.$store.commit('moveActor', {
-                actorNumb : index,
-                addX : 1, 
-                addY : 0
-              });
-            }
+          let addX = 1;
+          if(actor.whichSide === 'right'){
+            addX=-1;
+          }
+          const posId = self.$store.getters.getPosId({x:actor.x+addX, y:actor.y});
+          if(posId === ''){
+            self.$store.commit('moveActor', {
+              actorNumb : index,
+              addX,
+              addY : 0
+            });
           }
           index++;
         })
       }, 1000)
     },
     methods: {
-      spawn() {
-        this.$store.commit('spawnActor', {uuid:uuidv4(),actorName:'henohenomoheji',x:0,y:0,whichSide:'left'});
+      spawn(whichSide) {
+        let x = 0;
+        if(whichSide === 'right'){
+          x = 4
+        }
+        this.$store.commit('spawnActor', {uuid:uuidv4(),actorName:'henohenomoheji', x, y:0, whichSide});
       }
     },
     components: {

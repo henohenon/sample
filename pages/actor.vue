@@ -1,5 +1,5 @@
 <template>
-  <div class="actor" :style="'transform:translate('+x*30+'px,'+y*30+'px)'">
+  <div class="actor" :style="'transform:translate('+x*60+'px,'+y*60+'px)'">
     <meter :max ="maxHp" min="0" low="30" high="70" optimum="80" :value ="hp" ></meter>
   </div>
 </template>
