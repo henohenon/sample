@@ -5,7 +5,9 @@ const createStore = () => {
     state: () =>({
       actorTemplates: 
       {
-        henohenomoheji:{defaultHp:10.0,imagePath:''}
+        henohenomoheji:{defaultHp:10.0, imagePath:'', deffencePoint:0,
+          attackProps:{targetNumb:1, attackPoint: 1, attackLocations:[[1,0]]}
+        }
       },
       // actorがいれば、そのuuidが入る。getするときに[y][x]になっちゃうのがややっこしいところ。
       map: [['','','','','']],
@@ -45,6 +47,7 @@ const createStore = () => {
     mutations: {
       // actor配置
       spawnActor(state,obj) {
+        //位置被ってたら召喚中止
         if(state.map[obj.y][obj.x] !== ''){
           return
         }
