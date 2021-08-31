@@ -10,7 +10,7 @@ const createStore = () => {
       // actorがいれば、そのuuidが入る。getするときに[y][x]になっちゃうのがややっこしいところ。
       map: [['','','','','']],
       actors:[
-        // {id:'uuid' ,actorName:'henohenomoheji',whichSize:'left',hp:10.0,x:0,y:0}
+        // {id:'uuid' ,actorName:'henohenomoheji',whichSize:'left',maxHp:10.0,hp:10.0,x:0,y:0}
       ]
     }),
     getters: {
@@ -50,6 +50,7 @@ const createStore = () => {
           id : obj.uuid ,
           actorName : obj.actorName ,
           whichSide : obj.whichSide ,
+          maxHp : template.defaultHp ,
           hp : template.defaultHp ,
           x  : obj.x , 
           y  : obj.y

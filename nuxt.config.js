@@ -1,4 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
+import Sass from 'sass'
+import Fiber from 'fibers'
+
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -86,6 +89,14 @@ export default {
         options.loose = true
       },
     },
+    loaders: {
+      scss: {
+        implementation: Sass,
+        sassOptions: {
+          fiber: Fiber
+        }
+      }
+    }
   },
 
   // ポート変更

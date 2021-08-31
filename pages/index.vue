@@ -1,7 +1,9 @@
 <template>
   <section class="container">
-    <div v-for="item in actors" :key="item.id">
-      <h1>{{item.actorName}}</h1>
+    <div id="box">
+      <div v-for="item in actors" :key="item.id" class="actor">
+        <meter :max ="item.maxHp" min="0" low="30" high="70" optimum="80" :value ="item.hp"></meter>
+      </div>
     </div>
 
 <!-- 道をmapから生成しようと思ったけど微妙そうだったのでやめた痕跡
@@ -61,3 +63,22 @@
     },
   }
 </script>
+<style lang="scss">
+  #box{
+    width: 1000px;
+    height: 300px;
+  }
+
+  .actor{
+    width: 50px;
+	  height: 50px;
+	  border-radius: 50%;
+    background: skyblue;
+    position: absolute;
+    text-align: center;
+    meter{
+      width: 90%;
+      transform: translate(0%,200%);
+    }
+  }
+</style>
