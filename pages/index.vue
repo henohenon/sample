@@ -1,7 +1,9 @@
 <template>
   <section class="container">
     <div id="box">
+      <!--todo: pickedが参照渡しになってるのでどうにかする-->
       <Actor v-for="item in actors" :key="item.id" 
+        :template ="picked"
         :maxHp="item.maxHp" 
         :hp="item.hp" 
         :x ="item.x" 
@@ -9,6 +11,19 @@
       </Actor>
     </div>
 
+    <input type="radio" id="one" value="maru" checked v-model="picked">
+    <label for="one">maru</label>
+    <br>
+    <input type="radio" id="two" value="sikaku" v-model="picked">
+    <label for="two">sikaku</label>
+    <br>
+    <input type="radio" id="three" value="sankaku" v-model="picked">
+    <label for="two">sankaku</label>
+    <br>
+    <button id="leftSpawn"  @click="spawn('left')">spawnActorL</button>
+    <button id="rightSpawn" @click="spawn('right')">spawnActorR</button>
+  
+    
 <!-- 道をmapから生成しようと思ったけど微妙そうだったのでやめた痕跡
     <div v-for="(horizontalItem, horizontalIndex) in map" :key="'Load'+horizontalIndex">
       <div v-for="(verticalItem, verticalIndex) in horizontalItem" :key="verticalIndex">
@@ -17,8 +32,6 @@
     </div>
 -->
 
-    <button id="leftSpawn"  @click="spawn('left')">spawnActorL</button>
-    <button id="rightSpawn" @click="spawn('right')">spawnActorR</button>
   </section>
 </template>
 
@@ -32,9 +45,7 @@
   export default {
     data() {
       return {
-        content: '',
-        find_state: '',
-        find_flg: false
+        picked: 'maru',
       }
     },
     computed: {
@@ -120,7 +131,7 @@
         if(whichSide === 'right'){
           x = 4
         }
-        this.$store.commit('spawnActor', {uuid:uuidv4(),actorName:'henohenomoheji', x, y:0, whichSide});
+        this.$store.commit('spawnActor', {uuid:uuidv4(),actorName:this.picked, x, y:0, whichSide});
       }
     },
     components: {

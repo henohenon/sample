@@ -1,12 +1,12 @@
 <template>
-  <div class="actor" :style="'transform:translate('+x*60+'px,'+y*60+'px)'">
+  <div :class="'actor '+template" :style="'transform:translate('+x*60+'px,'+y*60+'px)'">
     <meter :max ="maxHp" min="0" low="30" high="70" optimum="80" :value ="hp" ></meter>
   </div>
 </template>
 
 <script>
   export default {
-    props: ['maxHp','hp',"x","y"],
+    props: ['maxHp','hp',"x","y","template"],
   }
 </script>
 
@@ -14,8 +14,6 @@
   .actor{
     width: 50px;
 	  height: 50px;
-	  border-radius: 50%;
-    background: skyblue;
     position: absolute;
     text-align: center;
     transition-duration: 0.5s;
@@ -24,6 +22,20 @@
       width: 90%;
       transform: translate(0%,200%);
     }
+  }
+  .actor.maru{
+    border-radius: 50%;
+    background: skyblue;
+  }
+  .actor.sikaku{
+    background: palevioletred  
+  }
+  // todo: なんかさんかくのときだけhpゲージの表示がおかしい
+  .actor.sankaku{
+    border-right: 50px solid transparent;
+    border-bottom: 86.6025px solid #b2ce54;
+    border-left: 50px solid transparent; 
+    background: none;
   }
 
   @keyframes attack {

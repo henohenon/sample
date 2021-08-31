@@ -5,13 +5,21 @@ const createStore = () => {
     state: () =>({
       actorTemplates: 
       {
-        henohenomoheji:{defaultHp:10.0, imagePath:'', deffencePoint:0,
+        maru:{defaultHp:20.0, imagePath:'', deffencePoint:0,
         // attackLocationsは、x,yで作る。実装するときにイメージしやすいように。
-          attackProps:{targetNumb:1, attackPoint: 1, attackLocations:[[1,0]]}
+          attackProps:{targetNumb:1, attackPoint: 3, attackLocations:[[1,0]]}
+        },
+        sikaku:{defaultHp:40.0, imagePath:'', deffencePoint:0,
+        // attackLocationsは、x,yで作る。実装するときにイメージしやすいように。
+          attackProps:{targetNumb:1, attackPoint: 2, attackLocations:[[1,0]]}
+        },
+        sankaku:{defaultHp:15.0, imagePath:'', deffencePoint:0,
+        // attackLocationsは、x,yで作る。実装するときにイメージしやすいように。
+          attackProps:{targetNumb:1, attackPoint: 2.5, attackLocations:[[1,0],[2,0]]}
         }
       },
       // actorがいれば、そのuuidが入る。getするときに[y][x]になっちゃうのがややっこしいところ。
-      map: [['','','','','']],
+      map: [['','','','','','','']],
       // actorの配列〜{id, actorName, whichSide, maxHp, hp, deffencePoint, attackProps, x, y}
       actors:[]
     }),
