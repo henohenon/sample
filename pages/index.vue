@@ -32,9 +32,31 @@
       ...mapState(['actors']),
       ...mapState(['map']),
     },
+    mounted () {
+      // thisがsetInterval内だと狂う(詳しくは知らん)ため、無理やり変数に格納する。参考→https://mi2log.hatenablog.jp/entry/20141206/1417856996
+      const self=this;
+
+      setInterval(function () {
+        // ...間違ってるのはわかってる。
+        let index = 0;
+        self.$store.getters.getActors.forEach(actor => {
+          if(actor.whichSide === 'left'){
+            const posId = self.$store.getters.getPosId({x:actor.x+1, y:actor.y});
+            if(posId === ''){
+              self.$store.commit('moveActor', {
+                actorNumb : index,
+                addX : 1, 
+                addY : 0
+              });
+            }
+          }
+          index++;
+        })
+      }, 1000)
+    },
     methods: {
       spawn() {
-        this.$store.commit('spawnActor', {uuid:uuidv4(),actorName:'henohenomoheji',x:1,y:1,whichSide:'left'});
+        this.$store.commit('spawnActor', {uuid:uuidv4(),actorName:'henohenomoheji',x:0,y:0,whichSide:'left'});
       }
     },
   }

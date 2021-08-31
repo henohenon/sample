@@ -7,12 +7,41 @@ const createStore = () => {
       {
         henohenomoheji:{defaultHp:10.0,imagePath:''}
       },
-      // 0が通れない、1が通れる。
-      map: [[1,1,1,1,1]],
+      // actorがいれば、そのuuidが入る。getするときに[y][x]になっちゃうのがややっこしいところ。
+      map: [['','','','','']],
       actors:[
         // {id:'uuid' ,actorName:'henohenomoheji',whichSize:'left',hp:10.0,x:0,y:0}
       ]
     }),
+    getters: {
+      getActors(state) {
+        return state.actors;
+      },
+      getActor: (state) => (id) => {
+        const tmp = state.actors.filter(e => e.id === id);
+        console.log(id,tmp)
+        if(tmp.length > 0){
+          return tmp[0];
+        }
+        return null;
+      },
+      getActorNumb: (state,getters) => (id) => {
+        const actor = getters.getActor(id);
+        if(actor !== null){
+          return state.actors.indexOf(actor);
+        }
+        return null;
+      },
+      getMap(state) {
+        return state.map;
+      },
+      getPosId: (state) => (pos) => {
+        return state.map[pos.y][pos.x];
+      },
+      getTemplate: (state) => (name) => {
+        return state.actorTemplates[name];
+      }
+    },
     mutations: {
       // actor配置
       spawnActor(state,obj) {
@@ -27,12 +56,14 @@ const createStore = () => {
         })
       },
       moveActor(state,obj) {
-        state.actors[obj.id].x += obj.addX;
-        state.actors[obj.id].x += obj.addY;
+        console.log(obj);
+        state.actors[obj.actorNumb].x += obj.addX;
+        state.actors[obj.actorNumb].y += obj.addY;
       },
     }
   })
 }
+
 
 
 export default createStore;
