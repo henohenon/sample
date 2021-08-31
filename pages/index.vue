@@ -1,48 +1,24 @@
 <template>
-  <section class = "container">
-    <h1>Todoリスト</h1>
-    <div class = "addArea">
-      <input type = "text" id = "addName" v-model="content" name = "addName" placeholder = "タスクを入力してください">
-      <button id = "addButton" class = "button button--green" @click="insert">追加</button>
+  <section class="container">
+    <div v-for="item in actors" :key="item.id">
+      <h1>{{item.actorName}}</h1>
     </div>
-    <div class = "Filter">
-      <button class = "button button--gray" v-bind:class="{'is-active':(!find_flg)}" @click="flag_reset">全て</button>
-      <button class = "button button--gray" v-bind:class="{'is-active':find_flg && (find_state === '作業前')}" @click = "find('作業前')">作業前</button>
-      <button class = "button button--gray" v-bind:class="{'is-active':find_flg && (find_state === '作業中')}" @click = "find('作業中')">作業中</button>
-      <button class = "button button--gray" v-bind:class="{'is-active':find_flg && (find_state === '完了')}" @click = "find('完了')">完了</button>
+
+<!-- 道をmapから生成しようと思ったけど微妙そうだったのでやめた痕跡
+    <div v-for="(horizontalItem, horizontalIndex) in map" :key="'Load'+horizontalIndex">
+      <div v-for="(verticalItem, verticalIndex) in horizontalItem" :key="verticalIndex">
+        <h1>{{verticalItem}}</h1>
+      </div>
     </div>
-    <table class = "Lists">
-      <thead>
-        <tr>
-          <th>タスク</th>
-          <th>登録日時</th>
-          <th>状態</th>
-          <th> </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in display_todos" :key="index">
-          <td>{{ item.content }}</td>
-          <td>{{ item.created }}</td>
-          <td>
-            <button class="button"
-                      v-bind:class="{
-                        'button--yet':item.state == '作業前',
-                        'button--progress':item.state == '作業中',
-                        'button--done':item.state == '完了'}"
-                      @click="changeState(item)">>
-              {{ item.state }}
-            </button>
-          </td>
-          <td><button class="button button--delete" @click="remove(item)">削除</button></td>
-        </tr>
-      </tbody>
-    </table>
+-->
+
+    <button @click="spawn">spawnActor</button>
   </section>
 </template>
 
 <script>
   import {mapState} from 'vuex';
+  import { v4 as uuidv4 } from 'uuid'
 
   export default {
     data() {
@@ -53,42 +29,13 @@
       }
     },
     computed: {
-      ...mapState(['todos']),
-      display_todos(){
-        if(this.find_flg){
-          const arr = [];
-          const data = this.todos;
-          data.forEach(element =>{
-            if(element.state === this.find_state){
-              arr.push(element);
-            }
-          });
-          return arr;
-        }else{
-          return this.todos;
-        }
-      }
+      ...mapState(['actors']),
+      ...mapState(['map']),
     },
     methods: {
-      insert() {
-        if(this.content !== ''){
-          this.$store.commit('insert', {content: this.content});
-          this.content = '';
-        }
-      },
-      remove(todo) {
-        this.$store.commit('remove', todo)
-      },
-      changeState(todo){
-        this.$store.commit('changeState',todo)
-      },
-      find(findState){
-        this.find_state = findState;
-        this.find_flg = true;
-      },
-      flag_reset(){
-        this.find_flg = false;
+      spawn() {
+        this.$store.commit('spawnActor', {uuid:uuidv4(),actorName:'henohenomoheji',x:1,y:1,whichSide:'left'});
       }
-    }
+    },
   }
 </script>

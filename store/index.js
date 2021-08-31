@@ -3,62 +3,34 @@ import Vuex from 'vuex';
 const createStore = () => {
   return new Vuex.Store({
     state: () =>({
-      todos: [
-        {content: 'テスト', created: '2020-04-30 17:00', state: '作業前'},
-        {content: 'コーディング', created: '2020-04-30 16:00', state: '作業中'},
-        {content: '環境構築', created: '2020-04-30 15:30', state: '完了'}
-      ],
-      option:[
-        {id:0, label:'作業前'},
-        {id:1, label:'作業中'},
-        {id:2, label:'完了'},
+      actorTemplates: 
+      {
+        henohenomoheji:{defaultHp:10.0,imagePath:''}
+      },
+      // 0が通れない、1が通れる。
+      map: [[1,1,1,1,1]],
+      actors:[
+        // {id:'uuid' ,actorName:'henohenomoheji',whichSize:'left',hp:10.0,x:0,y:0}
       ]
     }),
     mutations: {
-      insert(state, obj) {
-        const d = new Date();
-        const fmt = d.getFullYear()
-                  + '-' + ('00' + (d.getMonth() + 1)).slice(-2)
-                  + '-' + ('00' + d.getMonth()).slice(-2)
-                  + '-' + ('00' + d.getHours()).slice(-2)
-                  + '-' + ('00' + d.getMinutes()).slice(-2);
-        state.todos.unshift({
-          content: obj.content,
-          created: fmt,
-          state: '作業前'
+      // actor配置
+      spawnActor(state,obj) {
+        const template = state.actorTemplates[obj.actorName];
+        state.actors.unshift({
+          id : obj.uuid ,
+          actorName : obj.actorName ,
+          whichSide : obj.whichSide ,
+          hp : template.defaultHp ,
+          x  : obj.x , 
+          y  : obj.y
         })
       },
-      remove(state, obj) {
-        for(let i = 0; i < state.todos.length; i++){
-          const ob = state.todos[i];
-          if(ob.content === obj.content && ob.created === obj.created && ob.state === obj.state){
-            if(confirm('"' + ob. content + '"を削除しますか？')){
-              state.todos.splice(i,1);
-              return;
-            }
-          }
-        }
+      moveActor(state,obj) {
+        state.actors[obj.id].x += obj.addX;
+        state.actors[obj.id].x += obj.addY;
       },
-      changeState(state,obj){
-        for(let i = 0; i < state.todos.length; i++){
-          const ob = state.todos[i];
-          if(ob.content === obj.content && ob.created === obj.created && ob.state === obj.state){
-            let nowState;
-            for(let j = 0; j < state.option.length; j++){
-              if(state.option[j].label === ob.state){
-                nowState = state.option[j].id;
-              }
-            }
-            nowState++;
-            if(nowState >= state.option.length){
-              nowState = 0;
-            }
-            obj.state = state.option[nowState].label;
-            return;
-          }
-        }
-      }
-    }    
+    }
   })
 }
 
