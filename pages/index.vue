@@ -62,7 +62,7 @@
             let targets = 0;
             for(let i = 0; i < atkProps.attackLocations.length; i++){
               const attackPosId = self.$store.getters.getPosId({x:actor.x+atkProps.attackLocations[i][0]*addX, y:actor.y+atkProps.attackLocations[i][1]});
-              if(attackPosId !== ''){
+              if(attackPosId !== '' && attackPosId !== undefined){
                 self.$store.commit('damageToActor', {
                   damagedActorNumb: index,
                   takeDActorNumb : self.$store.getters.getActorNumb(attackPosId),
@@ -72,8 +72,6 @@
                 if(atkProps.targetNumb <= targets) {
                   break;
                 }
-              }else{
-                console.log('else');
               }
             }
             index++;
@@ -83,7 +81,6 @@
 
           // 同時志望パターンがややっこしかったので、for文が採用されました。
           for(let i = 0; i<self.$store.getters.getActors.length; i++) {
-            console.log(self.$store.getters.getActors[i].hp,self.$store.getters.getActors[i].hp<=0)
             if(self.$store.getters.getActors[i].hp <= 0){
               self.$store.commit('destroyActor',i);
               i--;
@@ -94,8 +91,8 @@
 
       // 移動用timerループ
       setInterval(function () {
-        let index = 0;
-        self.$store.getters.getActors.forEach(actor => {
+        for(let i = 0; i<self.$store.getters.getActors.length; i++) {
+          const actor = self.$store.getters.getActors[i];
           // 左右どっち行くか判定。ココ雑なので、向きをもたせるなり何なりさせたい。
           let addX = 1;
           if(actor.whichSide === 'right'){
@@ -105,13 +102,15 @@
           const movePosId = self.$store.getters.getPosId({x:actor.x+addX, y:actor.y});
           if(movePosId === ''){
             self.$store.commit('moveActor', {
-              actorNumb : index,
+              actorNumb : i,
               addX,
               addY : 0
             });
+          }else if(movePosId === undefined) {
+            self.$store.commit('destroyActor',self.$store.getters.getActorNumb(actor.id));
+            i--;
           }
-          index++;
-        })
+        }
       }, 1000);
     },
     methods: {
