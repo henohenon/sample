@@ -1,9 +1,7 @@
 <template>
   <section class="container">
     <div id="box">
-      <div v-for="item in actors" :key="item.id" class="actor">
-        <meter :max ="item.maxHp" min="0" low="30" high="70" optimum="80" :value ="item.hp"></meter>
-      </div>
+      <Actor v-for="item in actors" :key="item.id" :maxHp="item.maxHp" :hp="item.hp"></Actor>
     </div>
 
 <!-- 道をmapから生成しようと思ったけど微妙そうだったのでやめた痕跡
@@ -22,6 +20,9 @@
   import {mapState} from 'vuex';
   import { v4 as uuidv4 } from 'uuid'
 
+
+  import Actor from './actor.vue';
+
   export default {
     data() {
       return {
@@ -39,7 +40,7 @@
       const self=this;
 
       setInterval(function () {
-        // ...間違ってるのはわかってる。
+        // ...間違ってるのはわかってる(index)。
         let index = 0;
         self.$store.getters.getActors.forEach(actor => {
           if(actor.whichSide === 'left'){
@@ -61,6 +62,9 @@
         this.$store.commit('spawnActor', {uuid:uuidv4(),actorName:'henohenomoheji',x:0,y:0,whichSide:'left'});
       }
     },
+    components: {
+        Actor
+    }
   }
 </script>
 <style lang="scss">
