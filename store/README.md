@@ -10,4 +10,4 @@ Creating a file in this directory automatically activates the option in the fram
 More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/vuex-store).
 
 
-参考元(？)：https://www.boel.co.jp/tips/vol107/
+vueで遊んでみようのコーナー。にゃんこ大戦争的なやつを作りたい

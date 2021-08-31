@@ -3,7 +3,7 @@
     <div id="box">
       <!--todo: pickedが参照渡しになってるのでどうにかする-->
       <Actor v-for="item in actors" :key="item.id" 
-        :template ="picked"
+        :template ="item.actorName"
         :maxHp="item.maxHp" 
         :hp="item.hp" 
         :x ="item.x" 
