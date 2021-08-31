@@ -45,8 +45,6 @@
       // thisがsetInterval内だと狂う(詳しくは知らん)ため、無理やり変数に格納する。参考→https://mi2log.hatenablog.jp/entry/20141206/1417856996
       const self=this;
 
-      // 移動用とタイミングをずらす
-      setTimeout(function(){
         // 攻撃用タイマーループ
         setInterval(function () {
           // ...間違ってるのはわかってる(index)。
@@ -86,32 +84,35 @@
               i--;
             }
           };
-        }, 1000);
-      }, 800);
+        }, 1500);
+      
+      // 攻撃用とタイミングをずらす
+      setTimeout(function(){
+        // 移動用timerループ
+        setInterval(function () {
+          for(let i = 0; i<self.$store.getters.getActors.length; i++) {
+            const actor = self.$store.getters.getActors[i];
+            // 左右どっち行くか判定。ココ雑なので、向きをもたせるなり何なりさせたい。
+            let addX = 1;
+            if(actor.whichSide === 'right'){
+              addX=-1;
+            }
 
-      // 移動用timerループ
-      setInterval(function () {
-        for(let i = 0; i<self.$store.getters.getActors.length; i++) {
-          const actor = self.$store.getters.getActors[i];
-          // 左右どっち行くか判定。ココ雑なので、向きをもたせるなり何なりさせたい。
-          let addX = 1;
-          if(actor.whichSide === 'right'){
-            addX=-1;
+            const movePosId = self.$store.getters.getPosId({x:actor.x+addX, y:actor.y});
+            if(movePosId === ''){
+              self.$store.commit('moveActor', {
+                actorNumb : i,
+                addX,
+                addY : 0
+              });
+            }else if(movePosId === undefined) {
+              self.$store.commit('destroyActor',self.$store.getters.getActorNumb(actor.id));
+              i--;
+            }
           }
-          
-          const movePosId = self.$store.getters.getPosId({x:actor.x+addX, y:actor.y});
-          if(movePosId === ''){
-            self.$store.commit('moveActor', {
-              actorNumb : i,
-              addX,
-              addY : 0
-            });
-          }else if(movePosId === undefined) {
-            self.$store.commit('destroyActor',self.$store.getters.getActorNumb(actor.id));
-            i--;
-          }
-        }
+        }, 1500);
       }, 1000);
+
     },
     methods: {
       spawn(whichSide) {

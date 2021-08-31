@@ -18,10 +18,26 @@
     background: skyblue;
     position: absolute;
     text-align: center;
-    transition-duration: 0.8s;
+    transition-duration: 0.5s;
+    // animation: attack 0.5s ease 0s 1 normal none running;
     meter{
       width: 90%;
       transform: translate(0%,200%);
     }
   }
+
+  @keyframes attack {
+    0% {
+      width  : 50px;
+	    height : 50px;
+    }
+    30% {
+      width  : 70px;
+	    height : 70px;
+    }
+    100% {
+      width: 50px;
+	    height: 50px;
+    }
+}
 </style>
