@@ -1,5 +1,7 @@
 # VueStudy
 
+https://github.com/henohenon/NuxtDjangoStudy/tree/main ←に移行しました。
+
 ## Build Setup
 
 ```bash
